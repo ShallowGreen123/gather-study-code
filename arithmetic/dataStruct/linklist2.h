@@ -8,10 +8,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define DEF_BYTE_ALIGN_8    0
-#define DEF_BYTE_ALIGN_4    1
-#define DEF_LIST_ALIGN_MODE DEF_BYTE_ALIGN_8
+// define
+#define DEF_BYTE_ALIGN_8         0
+#define DEF_BYTE_ALIGN_4         1
+// config
+#define DEF_LIST_ALIGN_MODE      DEF_BYTE_ALIGN_8
+#define DEF_MALLOC(s)            malloc(s)
+#define DEF_FREE(s)              free(s)
+#define DEF_TEST_DOUBLE_LINKLIST 0
 
+//
 typedef uint8_t _node_p_;
 
 typedef struct _linklist2 {
@@ -31,9 +37,7 @@ void    *list_get_head_2(const linklist2_t *list);
 void    *list_get_tail_2(const linklist2_t *list);
 void    *list_get_next_2(const linklist2_t *list, const void *n_act);
 void    *list_get_prev_2(const linklist2_t *list, const void *n_act);
-uint32_t list_get_len_2(const linklist2_t *ll_p);
-void     list_swap_2(linklist2_t *ll_p, void *n1_p, void *n2_p);
-void     list_move_before_2(linklist2_t *ll_p, void *n_act, void *n_after);
+uint32_t list_get_len_2(const linklist2_t *list);
 bool     list_is_empty_2(linklist2_t *list);
 
 #define _LV_LL_READ(list, i)      for (i = list_get_head_2(list); i != NULL; i = list_get_next_2(list, i))
