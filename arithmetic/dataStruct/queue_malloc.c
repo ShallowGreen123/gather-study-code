@@ -11,15 +11,16 @@
         q->buf[pos++] = (0xFF00 & val) >> 8; \
     } while (0)
 
-void QueueMallocInit(queue_t *q) {
+void QueueMallocInit(queue_t *q, uint8_t *buf, uint32_t buf_size) {
     if (q != NULL) {
         q->init     = true;
-        q->buf      = malloc(DEF_QUEUE_BUF_SIZE);
-        q->bufSize  = DEF_QUEUE_BUF_SIZE;
+        q->buf      = buf;
+        q->bufSize  = buf_size;
         q->front    = 0;
         q->tail     = 0;
         q->elemCnt  = 0;
         q->usedSize = 0;
+        memset(q->buf, 0, q->bufSize);
     }
 }
 
@@ -135,10 +136,14 @@ uint32_t QueueMallocGetCnt(queue_t *q) {
 }
 
 /****************************** test ***************************************/
-#if DEF_TEST_MALLOC_QUEUE
+// config
+#define DEF_QUEUE_BUF_SIZE 1024
+
+#if 0
 
 // test
 queue_t que1;
+uint8_t buff[DEF_QUEUE_BUF_SIZE];
 //
 int main() {
     int   v = 100;
@@ -147,7 +152,7 @@ int main() {
     char  str[12] = "hello!";
     char *sp;
     // init
-    QueueMallocInit(&que1);
+    QueueMallocInit(&que1, buff, sizeof(buff));
 
     // push
     sp = QueueMallocInput(&que1, str, strlen(str) + 1);

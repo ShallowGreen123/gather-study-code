@@ -9,11 +9,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-// config
-#define DEF_QUEUE_BUF_SIZE    1024
-#define DEF_TEST_MALLOC_QUEUE 0
-
-//
 typedef uint16_t val_size;          // 两个字节记录数据长度
 
 typedef struct _queue_ {
@@ -26,7 +21,7 @@ typedef struct _queue_ {
     uint32_t usedSize;
 } queue_t;
 
-void     QueueMallocInit(queue_t *q);
+void     QueueMallocInit(queue_t *q, uint8_t *buf, uint32_t buf_size);
 void    *QueueMallocInput(queue_t *q, void *val, val_size valSize);
 void    *QueueMallocOutput(queue_t *q, val_size *size);
 bool     QueueMallocSpaceChk(queue_t *q, val_size size);
