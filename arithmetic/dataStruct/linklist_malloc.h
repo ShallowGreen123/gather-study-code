@@ -15,7 +15,7 @@
 #define DEF_LIST_ALIGN_MODE      DEF_BYTE_ALIGN_8
 #define DEF_MALLOC(s)            malloc(s)
 #define DEF_FREE(s)              free(s)
-#define DEF_TEST_DOUBLE_LINKLIST 0
+#define DEF_TEST_MALLOC_LINKLIST 0
 
 //
 typedef uint8_t _node_p_;

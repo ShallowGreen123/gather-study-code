@@ -1,7 +1,7 @@
 
 #include "linklist_malloc.h"
 
-#if DEF_TEST_DOUBLE_LINKLIST
+#if DEF_TEST_MALLOC_LINKLIST
 #include <string.h>
 #endif
 
@@ -233,7 +233,7 @@ static void list_node_p_set_next(linklist2_t *p, _node_p_ *act, _node_p_ *next) 
 }
 
 /***************************** test ******************************************/
-#if DEF_TEST_DOUBLE_LINKLIST
+#if DEF_TEST_MALLOC_LINKLIST
 
 // test
 typedef struct info {
