@@ -1,5 +1,5 @@
 
-#include "linklist2.h"
+#include "linklist_malloc.h"
 
 #if DEF_TEST_DOUBLE_LINKLIST
 #include <string.h>

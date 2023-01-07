@@ -13,7 +13,7 @@
 #define DEF_LIST_ALIGN_MODE    DEF_BYTE_ALIGN_8
 #define DEF_STACK_MALLOC(size) malloc(size)
 #define DEF_STACK_FREE(p)      free(p)
-#define DEF_TEST_MALLOC_STACK  1
+#define DEF_TEST_MALLOC_STACK  0
 
 //
 typedef uint8_t stack_node_p;
