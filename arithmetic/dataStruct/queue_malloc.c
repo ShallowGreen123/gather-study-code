@@ -124,6 +124,28 @@ void *QueueMallocPeek(queue_t *q, val_size *size) {
     return (void *)&q->buf[q->front + sizeof(val_size)];
 }
 
+void *QueueMallocPeekAfter(queue_t *q, void *cur_item, val_size *size) {
+    uint32_t bufPos = (uint8_t *)cur_item - q->buf - sizeof(val_size);
+    uint32_t itemSize;
+
+    if (q->init == false || q->elemCnt == 0 || q->tail == bufPos) {
+        return NULL;
+    }
+
+    bufPos   = bufPos + DEF_QUEUE_GET_VAL_SIZE(q, bufPos);
+    itemSize = DEF_QUEUE_GET_VAL_SIZE(q, bufPos);
+    if (itemSize == DEF_QUEUE_VAL_LEN_INVAILD) {
+        bufPos   = 0;
+        itemSize = DEF_QUEUE_GET_VAL_SIZE(q, bufPos);
+    }
+
+    if (size) {
+        *size = itemSize;
+    }
+    printf("bufPos = %d\n", bufPos);
+    return (void *)&q->buf[bufPos + sizeof(val_size)];
+}
+
 void QueueMallocClear(queue_t *q) {
     q->front    = 0;
     q->tail     = 0;
@@ -139,44 +161,49 @@ uint32_t QueueMallocGetCnt(queue_t *q) {
 // config
 #define DEF_QUEUE_BUF_SIZE 1024
 
-#if 0
+#if 1
 
 // test
 queue_t que1;
 uint8_t buff[DEF_QUEUE_BUF_SIZE];
 //
 int main() {
-    int   v = 100;
-    int  *p;
+    uint16_t size;
+    char    *sp;
+    char     str1[12] = "hello!";
+    char     str2[16] = "world124";
+    char     str3[16] = "Abcdefg";
 
-    char  str[12] = "hello!";
-    char *sp;
     // init
     QueueMallocInit(&que1, buff, sizeof(buff));
 
     // push
-    sp = QueueMallocInput(&que1, str, strlen(str) + 1);
-    printf("str = %s, used=%d/%d, tail=%d\n", sp, que1.usedSize, que1.bufSize, que1.tail);
+    sp = QueueMallocInput(&que1, str1, strlen(str1) + 1);
+    printf("str1 = %s, used=%d/%d, tail=%d\n", sp, que1.usedSize, que1.bufSize, que1.tail);
 
-    p = QueueMallocInput(&que1, &v, sizeof(int));
-    if (p)
-        printf("v = %d, used=%d/%d, tail=%d\n", *p, que1.usedSize, que1.bufSize, que1.tail);
+    sp = QueueMallocInput(&que1, str2, strlen(str2) + 1);
+    if (sp)
+        printf("v = %s, used=%d/%d, tail=%d\n", sp, que1.usedSize, que1.bufSize, que1.tail);
 
-    v = 200;
-    if (QueueMallocSpaceChk(&que1, sizeof(int))) {
-        p = QueueMallocInput(&que1, &v, sizeof(int));
-        printf("v = %d, used=%d/%d, tail=%d\n", *p, que1.usedSize, que1.bufSize, que1.tail);
+    if (QueueMallocSpaceChk(&que1, strlen(str3) + 1)) {
+        sp = QueueMallocInput(&que1, str3, strlen(str3) + 1);
+        printf("v = %s, used=%d/%d, tail=%d\n", sp, que1.usedSize, que1.bufSize, que1.tail);
     }
+
+    sp = QueueMallocPeek(&que1, NULL);
+    printf("peek = %s\n", sp);
+
+    sp = QueueMallocPeekAfter(&que1, sp, NULL);
+    printf("peek after = %s\n", sp);
+
+    sp = QueueMallocPeekAfter(&que1, sp, NULL);
+    printf("peek after = %s\n", sp);
 
     printf("******* pop *****\n");
     // pop
-    uint16_t size;
-    sp = QueueMallocOutput(&que1, &size);
-    printf("size=%d, str=%s, cnt=%d\n", size, sp, QueueMallocGetCnt(&que1));
 
-    size = 0;
-    QueueMallocPeek(&que1, &size);
-    printf("size=%d, cnt=%d\n", size, QueueMallocGetCnt(&que1));
+    sp = QueueMallocOutput(&que1, &size);
+    printf("size=%d, str1=%s, cnt=%d\n", size, sp, QueueMallocGetCnt(&que1));
 
     return 0;
 }

@@ -26,6 +26,7 @@ void    *QueueMallocInput(queue_t *q, void *val, val_size valSize);
 void    *QueueMallocOutput(queue_t *q, val_size *size);
 bool     QueueMallocSpaceChk(queue_t *q, val_size size);
 void    *QueueMallocPeek(queue_t *q, val_size *size);
+void    *QueueMallocPeekAfter(queue_t *q, void *cur_item, val_size *size);
 void     QueueMallocClear(queue_t *q);
 uint32_t QueueMallocGetCnt(queue_t *q);
 #endif
