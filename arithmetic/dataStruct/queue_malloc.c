@@ -32,7 +32,7 @@ void *QueueMallocInput(queue_t *q, void *val, val_size valSize) {
         return NULL;
     }
 
-    if (DEF_QUEUE_RESERVE_SIZE(q) < valSize) {          // 没有足够的空间保存这个数据
+    if (DEF_QUEUE_RESERVE_SIZE(q) < needSize) {          // 没有足够的空间保存这个数据
         return NULL;
     }
 
@@ -75,7 +75,7 @@ void *QueueMallocOutput(queue_t *q, val_size *size) {
     if (size) {
         *size = DEF_QUEUE_GET_VAL_SIZE(q, q->front);
     }
-    dataSize = DEF_QUEUE_GET_VAL_SIZE(q, q->front) + sizeof(val_size);
+    dataSize = DEF_QUEUE_GET_VAL_SIZE(q, q->front);
     value    = &q->buf[q->front + sizeof(val_size)];
 
     q->front += dataSize;
@@ -87,6 +87,9 @@ void *QueueMallocOutput(queue_t *q, val_size *size) {
     q->usedSize -= dataSize;
     q->elemCnt--;
 
+    if (q->elemCnt == 0) {
+        q->front = 0;
+    }
     return value;
 }
 
